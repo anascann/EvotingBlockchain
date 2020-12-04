@@ -1,24 +1,32 @@
-import logo from './logo.svg';
+import React,{useState} from 'react';
+
+import LandingPage from "./LandingPage/LandingPage"
+import {UserContext} from "./Context/UserContext"
+import Customer from "./Customer/Customer"
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import './App.css';
+import Switch from 'react-bootstrap/esm/Switch';
 
 function App() {
+
+  const [Details,setDetails]=useState({
+    name:'',
+    email:''
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+   <Router>
+    <div className="app">
+    <UserContext.Provider value={{Details,setDetails}}>
+    <Switch>
+      
+      <Route exact path="/" component={LandingPage}/>
+      <Route path="/customer" component={Customer}/>
+      </Switch>
+      </UserContext.Provider> 
     </div>
+    </Router>
+  
   );
 }
 
