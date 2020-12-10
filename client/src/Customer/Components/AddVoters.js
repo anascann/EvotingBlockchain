@@ -10,6 +10,7 @@ const [ElectionID,setElectionID]=useState(' ');
 const [Items,setItems]=useState([]);
 const [Value,setValue]=useState(' ');
 const [Error,setError]=useState(null);
+const [VoterSent,setVoterSent]=useState(false);
 
 
 const fetchElection=async()=>{
@@ -28,10 +29,31 @@ const fetchElection=async()=>{
         //console.log(response.data);
         setElectionData(response.data);
         console.log(ElectionData);
+        
+      setTimeout(() => {
+        axios({
+          method:"POST",
+          url: 'http://localhost:5000/send_mail',
+          data:{
+            "electionId": ElectionID,
+          }
+        }).then(function(response){
+          console.log(response);
+          console.log('email sent success');
+        }).catch(function(response){
+          console.error(response);
+          console.log('email sent failure');
+        })
+ 
+      }, 1000);
+       
+
     })
         .catch(function(response){
             console.log(response);
         })
+
+                
 
 }
 
@@ -143,6 +165,32 @@ useEffect(()=>{
          })
      }
 
+     const handleFormSubmit=async(e)=>{
+       e.preventDefault();
+       const objectSending={
+         "electionId": ElectionID,
+         "voters_new": Items
+       }
+
+       console.log(objectSending);
+
+       axios({
+         method: "POST",
+         url: ' http://localhost:5000/add_voters',
+         data: objectSending
+       }).then(function(response){
+         console.log(response);
+         console.log('sending success');
+
+
+        
+
+       }).catch(function(response){
+         console.error(response);
+         console.error('sending failed');
+       })
+     }
+
     return (
         <div>
             <h1>I add Voters</h1>
@@ -201,7 +249,7 @@ useEffect(()=>{
             </Row>
             <Row>
             <Col xs={3}>
-            <Button type="submit">Add Voters</Button>
+            <Button onClick={(e)=>handleFormSubmit(e)} type="submit">Add Voters</Button>
             </Col>
             </Row>
             

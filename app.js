@@ -10,6 +10,7 @@ var testAPIrouter=require('./routes/testAPI');
 var mongoose=require('mongoose');
 var auth=require('./routes/auth');
 var election=require('./routes/election');
+var voters=require('./routes/voters');
 var bodyparser=require('body-parser')
 var app = express();
 
@@ -29,6 +30,7 @@ app.use('/users', usersRouter);
 app.use('/testAPI',testAPIrouter);
 app.use('/',auth);
 app.use('/', election);
+app.use('/', voters);
 
 //mongoDB configuration;
 
