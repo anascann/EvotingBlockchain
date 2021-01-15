@@ -2,6 +2,8 @@ import React,{useState, useEffect, useContext} from 'react'
 import { Button,Row, Col,option, InputGroup, InputGroupAddon, InputGroupText, Input, Form,FormGroup,Label } from 'reactstrap';
 import {UserContext} from "../../Context/UserContext";
 import axios from "axios";
+import {toast,ToastContainer} from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 import "./Styles.css"
 export default function AddVoters() {
 const context=useContext(UserContext);
@@ -11,11 +13,29 @@ const [Items,setItems]=useState([]);
 const [Value,setValue]=useState(' ');
 const [Error,setError]=useState(null);
 const [VoterSent,setVoterSent]=useState(false);
+const [ElectionName,setElectionName]=useState(' ');
+
+
+const sendMail=async()=>{
+  await axios({
+    method:"POST",
+    url: 'http://localhost:5000/send_mail',
+    data:{
+      "electionId": ElectionID,
+    }
+  }).then(function(response){
+    console.log(ElectionID);
+    console.log(response);
+    console.log('email sent success');
+  }).catch(function(response){
+    console.error(response);
+    console.log('email sent failure');
+  })
+}
 
 
 const fetchElection=async()=>{
     console.log(context.Details.email);
-
  await axios({
         method: "post",
         url: 'http://localhost:5000/get_election_data',
@@ -29,29 +49,12 @@ const fetchElection=async()=>{
         //console.log(response.data);
         setElectionData(response.data);
         console.log(ElectionData);
-        
-      setTimeout(() => {
-        axios({
-          method:"POST",
-          url: 'http://localhost:5000/send_mail',
-          data:{
-            "electionId": ElectionID,
-          }
-        }).then(function(response){
-          console.log(response);
-          console.log('email sent success');
-        }).catch(function(response){
-          console.error(response);
-          console.log('email sent failure');
-        })
- 
-      }, 1000);
-       
-
     })
         .catch(function(response){
             console.log(response);
         })
+
+        
 
                 
 
@@ -159,9 +162,11 @@ useEffect(()=>{
              if(key.name===e.target.value){
                 setElectionID(key._id);
                 console.log(key. _id);
+                console.log(key.name);
+                setElectionName(key.name);
              }
 
-             console.log(ElectionID);
+            
          })
      }
 
@@ -169,21 +174,43 @@ useEffect(()=>{
        e.preventDefault();
        const objectSending={
          "electionId": ElectionID,
-         "voters_new": Items
+         "voters_new": Items,
+         "ElectionName": ElectionName
        }
 
-       console.log(objectSending);
 
-       axios({
+
+       await axios({
          method: "POST",
          url: ' http://localhost:5000/add_voters',
          data: objectSending
-       }).then(function(response){
+       }).then(async (response)=>{
          console.log(response);
          console.log('sending success');
+         console.log(ElectionID);
 
+         
 
-        
+         await axios({
+            method:"POST",
+            url: 'http://localhost:5000/send_mail',
+            data:{
+              "electionId": ElectionID,
+              
+            }
+          }).then(function(response){
+            console.log(response);
+            console.log(response);
+            console.log('email sent success');
+            toast.success('Email Sent to the Voter');
+          }).catch(function(response){
+            console.error(response);
+            console.log('email sent failure');
+            toast.warn('Email sending Failed!');
+          })
+
+      
+          
 
        }).catch(function(response){
          console.error(response);
@@ -193,7 +220,7 @@ useEffect(()=>{
 
     return (
         <div>
-            <h1>I add Voters</h1>
+            <h1>Please add Voters</h1>
             <br/>
             <Form>
             <Row>
@@ -254,7 +281,7 @@ useEffect(()=>{
             </Row>
             
 
-            
+            <ToastContainer/>
             </Form>
         </div>
     )

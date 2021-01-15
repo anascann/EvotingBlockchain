@@ -1,8 +1,4 @@
-const path = require("path");
-const fs = require("fs");
-//const secrets = JSON.parse(fs.readFileSync(".secrets.json").toString().trim());
-//const INFURA_KEY = "";
-//const provider = require("@truffle/hdwallet-provider");
+const path = require('path');
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -11,7 +7,7 @@ const fs = require("fs");
  *
  * More information about configuration can be found at:
  *
- * truffleframework.com/docs/advanced/configuration
+ * trufflesuite.com/docs/advanced/configuration
  *
  * To deploy via Infura you'll need a wallet provider (like @truffle/hdwallet-provider)
  * to sign your transactions before they're sent to a remote public node. Infura accounts
@@ -41,12 +37,6 @@ module.exports = {
    */
 
   networks: {
-    // kovan: {
-    //   provider: () => new provider(secrets.privatekeys, INFURA_KEY, 0, 1),
-    //   gas: 20000000000,
-    //   gasPrice: 20000000000,
-    //   network_id: 42,
-    // },
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
     // You should run a client (like ganache-cli, geth or parity) in a separate terminal
@@ -89,11 +79,13 @@ module.exports = {
   mocha: {
     // timeout: 100000
   },
+
   contracts_build_directory: path.join(__dirname, "/src/contracts"),
+
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.7.0", // Fetch exact version from solc-bin (default: truffle's version)
+     version: "0.7.4",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
@@ -102,6 +94,6 @@ module.exports = {
       //  },
       //  evmVersion: "byzantium"
       // }
-    },
-  },
+    }
+  }
 };

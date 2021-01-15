@@ -4,6 +4,7 @@ import {Nav, Row} from "react-bootstrap"
 import {Navbar,Button} from "react-bootstrap"
 import Login from "./Login/Login"
 import SignUp from "./SignUp/SignUp"
+import VoterLogin from "./VoterLogin"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./NavBar.css"
 export default function NavBar() {
@@ -11,11 +12,15 @@ export default function NavBar() {
   const [Clicked,setClicked]=useState(false);
   const [SignUpComponent,setSignUpComponent]=useState(false)
   const [LoginComponent,setLoginComponent]=useState(false);
-
+  const [LoginVoterComponent, setLoginVoterComponent]=useState(false);
 
   function launchLogin(){
    
 setLoginComponent(!LoginComponent);
+  }
+
+  function launchLoginVoter(){
+    setLoginVoterComponent(!LoginVoterComponent)
   }
 
   function LaunchSignUp(){
@@ -35,6 +40,9 @@ setLoginComponent(!LoginComponent);
         <Nav className="mr-auto">
         <Nav.Link onClick={launchLogin} href="#">Host an Election</Nav.Link>
         </Nav>
+        <Nav className="mr-auto">
+        <Nav.Link onClick={launchLoginVoter} href="#">Cast A vote</Nav.Link>
+        </Nav>
 
         <Nav>
        <Button onClick={launchLogin}>Login</Button>
@@ -46,6 +54,7 @@ setLoginComponent(!LoginComponent);
 
       {LoginComponent ? <Login setLoginComponent={setLoginComponent}/>: ''}
       {SignUpComponent ? <SignUp setSignUpComponent={setSignUpComponent}/> : ''}
+      {LoginVoterComponent ? <VoterLogin setLoginVoterComponent={setLoginVoterComponent}/> : ' '}
     
         </div>
     )

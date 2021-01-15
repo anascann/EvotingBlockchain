@@ -1,8 +1,10 @@
 import React,{useState,useContext} from 'react';
 import {useForm } from "react-hook-form";
-import {Input} from "reactstrap";
+import {Input,Row,Col,Button} from "reactstrap";
 import axios from "axios";
 import {UserContext} from "../../Context/UserContext";
+import {toast,ToastContainer} from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function CreateElection() {
     const context=useContext(UserContext);
@@ -32,10 +34,12 @@ export default function CreateElection() {
         .then(function(response){
             console.log(response)
             console.log('election created')
+            toast.success('Election Created!!')
         })
             .catch(function(response){
                 console.log(response);
                 console.log('election creation failed');
+                toast.warning('Election creation Failed');
             })
 
  
@@ -52,15 +56,25 @@ export default function CreateElection() {
     }
     return (
         <div>
-           <header><h1>Create An Election: </h1></header> 
-           <form onSubmit={handleSubmit(onSubmit)}>
+        <Row>
+        <Col xs="6">
+        <header><h1>Create An Election: </h1></header>
+        </Col>
+        </Row>
+            <Row>
+            <Col xs="4">
+            <form onSubmit={handleSubmit(onSubmit)}>
            <Input  onChange={handleElectionNameChange} name="election" placeholder="Enter your Election Name" type="text" ref={register({ required: true })} />
            {errors.firstName && "Election name is required"}
            <Input onChange={handleVotersnumChange} name="totalvoters" type="number" ref={register({ required: true })} />
            {errors.lastName && "No. of Voters is required is required"}
-           <input type="submit" />
+           <br/>
+           <Button type="submit">Submit</Button>
          </form>
+            </Col>
+            </Row>
            
+         <ToastContainer/>
         </div>
     )
 }

@@ -59,6 +59,8 @@ export default function Login({setLoginComponent}) {
         email:response.data.data.email
       });
 
+      
+
       toast.success('Login Successfull');
 
         setTimeout(() => {

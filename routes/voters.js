@@ -31,6 +31,7 @@ Voters.findOne({electionId: req.body.electionId})
         }
        const newVoters=new Voters({
           electionId: req.body.electionId,
+          ElectionName: req.body.ElectionName,
            voters:   votersAdded 
     })
 
@@ -43,7 +44,7 @@ Voters.findOne({electionId: req.body.electionId})
             .catch(err=>res.json(err))
     })
 
-router.get('/send_mail', (req,res)=>res.json({success:'get is working'}))
+//router.get('/send_mail', (req,res)=>res.json({success:'get is working'}))
 router.post('/send_mail',(req,res)=>{
     Voters.findOne({ electionId: req.body.electionId}).then(function(users){
       //res.json(users);
@@ -52,17 +53,19 @@ router.post('/send_mail',(req,res)=>{
       // array.map(key=>{
       //   console.log(array[key].email);
       // })
-
+      var ename=users.ElectionName;
       array.forEach(element => {
         let email=element.email;
         let pass=element.password;
+        
+        let Eid=req.body.electionId;
 
         var mailOptions = {
           from: `EvotingCrypto`,
           to: `${email}`,
           subject: 'Credentials for login',
-          text: `Hello User! Your credentials for the upcoming elections are ${email} and password ${pass} is : this
-          ! Kindly don't share your password with someone else`
+          text: `Hello User! Your credentials for the  election ${ename} and EMAIL: ${email} and Password: ${pass}
+          ! Kindly don't share your password with someone else. a Link will be shared to you shortly. Please use that Link and Eid,Email & pass to login.`
         };
       
         
@@ -74,9 +77,11 @@ router.post('/send_mail',(req,res)=>{
             
            transporter1.sendMail(mailOptions, function(error, info){
               if(error){
-                throw error;
+                console.log(error);
+                res.status(500).json({error : error})
               }else{
                 console.log(info);
+                res.status(200).json({success: `Mail sent to ${email}`});
               }
             })  
           

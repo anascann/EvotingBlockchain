@@ -3,6 +3,7 @@ import React,{useState} from 'react';
 import LandingPage from "./LandingPage/LandingPage"
 import {UserContext} from "./Context/UserContext"
 import Customer from "./Customer/Customer"
+import Voter from "./Voter/Voter"
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import './App.css';
 import Switch from 'react-bootstrap/esm/Switch';
@@ -22,6 +23,7 @@ function App() {
       
       <Route exact path="/" component={LandingPage}/>
       <Route path="/customer" component={Customer}/>
+      <Route path="/voter" component={Voter}/>
       </Switch>
       </UserContext.Provider> 
     </div>

@@ -8,7 +8,11 @@ const VotersSchema=new Schema({
     electionId:{
         type: ObjectId,
         ref: "Election"
-},
+},   
+    ElectionName:{
+        type:String,
+        required:false
+    },
         voters:[
             {
                 email:{

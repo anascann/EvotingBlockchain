@@ -21,6 +21,9 @@ import {UserContext} from "../../Context/UserContext"
 import DefaultComponent from './DefaultComponent';
 import CreateElection from './CreateElection';
 import AddVoters from './AddVoters';
+import AddCandidates from "./AddCandidates";
+import ResultsMonitor from "./ResultsMonitor";
+import {Redirect} from "react-router-dom"
 
 const drawerWidth = 240;
 
@@ -91,6 +94,7 @@ export default function Navcomponent(Information) {
     Email: info.Details.email
   });
 
+  const [LoggedOut,setLoggedOut]=useState(false);
   const [Display,setDisplay]=useState(<DefaultComponent/>)
 
   const handleDrawerOpen = () => {
@@ -109,11 +113,20 @@ export default function Navcomponent(Information) {
 setDisplay(<AddVoters/>);
   }
 
+  const LaunchAddCandidates=()=>{
+    setDisplay(<AddCandidates/>)
+  }
+
+  const LaunchMonitorResults=()=>{
+    setDisplay(<ResultsMonitor/>);
+  }
+
  
 
   return (
     <div className={classes.root}>
     {console.log(UserDetails.Name)}
+    {LoggedOut ? <Redirect to="/"/>: ' '}
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -133,6 +146,11 @@ setDisplay(<AddVoters/>);
           </IconButton>
           <Typography variant="h6" noWrap>
           {UserDetails.Name}
+          </Typography>
+          <Typography float="right" style={{marginLeft:'70%'}} variant="h6" noWrap>
+          <a onClick={()=> {
+           setLoggedOut(true);
+          }}>Logout</a>
           </Typography>
         </Toolbar>
       </AppBar>
@@ -162,6 +180,12 @@ setDisplay(<AddVoters/>);
 <>
           <ListItem button onClick={LaunchCreateElection}>
           <ListItemText>Create Election</ListItemText>
+          </ListItem>
+          <ListItem button onClick={LaunchAddCandidates}>
+          <ListItemText>Add Candidates</ListItemText>
+          </ListItem>
+          <ListItem button onClick={LaunchMonitorResults}>
+          <ListItemText>Monitor Results</ListItemText>
           </ListItem>
           <ListItem button onClick={LaunchAddVoters}>
           <ListItemText>Add Voters</ListItemText>

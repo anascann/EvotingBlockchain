@@ -11,6 +11,7 @@ router.get('/',(req,res)=>res.json({test: 'auth is working'}))
 //import Schema person
 
 const Person=require('../Modals/Person');
+const Voters=require('../Modals/Voters');
 
 //@type post
 //@route /routes/register
@@ -95,6 +96,34 @@ router.post('/login',(req,res)=>{
             }
         })
             .catch(err=>console.log(err))
+})
+
+router.post('/voter_login',(req,res)=>{
+
+        Voters.findOne({electionId:req.body.electionId}).then(key=>{
+            key.voters.map(element=>{
+                if(element.email===req.body.email  && element.password===req.body.password ){
+                    const payload={
+                        id: req.body.electionId,
+                        email: req.body.email,
+                        password: req.body.password
+                    }
+
+                    jsonwt.sign(
+                        payload,
+                        key,
+                        {expiresIn:3600},
+                        (err,token)=>{
+                            res.json({
+                                success:true,
+                                token: 'bearer' + token,
+                                data: payload
+                            })
+                        }
+                    )
+                }
+            })
+        })
 })
 
 
